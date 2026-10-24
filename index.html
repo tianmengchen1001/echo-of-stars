@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>群星的回响 · Galactic Archive</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='32' y2='32'%3E%3Cstop stop-color='%23f6d7a4'/%3E%3Cstop offset='.5' stop-color='%23eba6b4'/%3E%3Cstop offset='1' stop-color='%238ee0d3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ccircle cx='16' cy='13' r='4' fill='url(%23g)'/%3E%3Cpath d='M7 21c3-4 6-6 9-6s6 2 9 6' fill='none' stroke='url(%23g)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07061a;
+  --deep:#100b2b;
+  --text:#f1ecf8;
+  --muted:#a79fc4;
+  --dim:#6f6690;
+  --amber:#f2d3a2;
+  --mint:#8ee0d3;
+  --rose:#eba6b4;
+  --orchid:#b79bea;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.18);
+  --glass:rgba(255,255,255,.055);
+  --grad:linear-gradient(100deg,#f6d7a4 0%,#eba6b4 38%,#b79bea 68%,#8ee0d3 100%);
+  --font-display:"Cormorant Garamond","Noto Serif SC",serif;
+  --font-body:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",monospace;
+  --shadow:0 30px 80px -45px rgba(0,0,0,.9);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:#0a0822;color:var(--text);
+  font-family:var(--font-body);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow:hidden;
+}
+::selection{background:rgba(235,166,180,.35);color:#fff}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:1px solid rgba(242,211,162,.7);outline-offset:3px}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22)}
+
+/* ============ 天空 ============ */
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:1;will-change:transform}
+.orb--a{
+  width:56vw;height:56vw;left:-14vw;top:-20vw;
+  background:radial-gradient(circle at 38% 38%,rgba(235,166,180,.85),rgba(120,58,132,.5) 48%,rgba(120,58,132,0) 72%);
+  animation:drift-a 30s ease-in-out infinite;
+}
+.orb--b{
+  width:48vw;height:48vw;right:-12vw;top:6vh;
+  background:radial-gradient(circle at 50% 50%,rgba(110,210,196,.62),rgba(48,96,150,.38) 52%,rgba(48,96,150,0) 74%);
+  animation:drift-b 36s ease-in-out infinite;
+}
+.orb--c{
+  width:52vw;height:52vw;left:22vw;bottom:-30vw;
+  background:radial-gradient(circle at 50% 50%,rgba(242,211,162,.6),rgba(160,90,90,.32) 50%,rgba(160,90,90,0) 74%);
+  animation:drift-c 40s ease-in-out infinite;
+}
+.orb--d{
+  width:38vw;height:38vw;right:8vw;bottom:-8vw;
+  background:radial-gradient(circle at 50% 50%,rgba(150,120,235,.62),rgba(60,40,120,.34) 55%,rgba(60,40,120,0) 75%);
+  animation:drift-a 34s ease-in-out infinite reverse;
+}
+@keyframes drift-a{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(4vw,3vh,0) scale(1.08)}
+}
+@keyframes drift-b{
+  0%,100%{transform:translate3d(0,0,0) scale(1.02)}
+  50%{transform:translate3d(-3vw,5vh,0) scale(.94)}
+}
+@keyframes drift-c{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(3vw,-4vh,0) scale(1.1)}
+}
+.aurora{
+  position:absolute;left:-22vw;top:-4vh;width:144vw;height:64vh;
+  background:linear-gradient(100deg,
+    rgba(242,211,162,.3) 0%,
+    rgba(235,166,180,.4) 30%,
+    rgba(183,155,234,.36) 62%,
+    rgba(142,224,211,.26) 100%);
+  filter:blur(76px);transform:rotate(-8deg);opacity:.72;
+  animation:aurora 26s ease-in-out infinite alternate;
+}
+@keyframes aurora{
+  from{transform:rotate(-8deg) translate3d(-2vw,0,0) scale(1)}
+  to{transform:rotate(-4deg) translate3d(2vw,2vh,0) scale(1.06)}
+}
+.stars{position:absolute;inset:0}
+.stars i{
+  position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;
+  animation:twinkle 6s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.7)}50%{opacity:.75;transform:scale(1)}}
+.veil{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 0%,rgba(7,6,26,0) 0%,rgba(7,6,26,.38) 56%,rgba(7,6,26,.86) 100%),
+    linear-gradient(180deg,rgba(7,6,26,0),rgba(7,6,26,.24) 48%,rgba(7,6,26,.78));
+}
+.grain{
+  position:absolute;inset:-50%;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.cursor-glow{
+  position:fixed;left:0;top:0;width:440px;height:440px;border-radius:50%;
+  transform:translate3d(-50%,-50%,0);pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(235,166,180,.1),rgba(142,224,211,.05) 45%,transparent 70%);
+  transition:opacity .6s ease;opacity:0;
+}
+
+/* ============ 布局 ============ */
+.app{position:relative;z-index:1;display:grid;grid-template-columns:300px minmax(0,1fr);height:100vh;height:100dvh}
+
+/* ============ 纪元侧栏 ============ */
+.rail{
+  position:relative;display:flex;flex-direction:column;gap:24px;
+  height:100%;padding:28px 20px 20px;overflow:hidden;
+  border-right:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+}
+.rail::after{
+  content:"";position:absolute;top:0;right:-1px;width:1px;height:100%;
+  background:linear-gradient(180deg,transparent 4%,rgba(242,211,162,.35) 34%,rgba(142,224,211,.28) 66%,transparent 96%);
+}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 6px 0}
+.mark{width:44px;height:44px;flex:0 0 44px;filter:drop-shadow(0 6px 18px rgba(235,166,180,.28))}
+.brand-name{font-size:15px;letter-spacing:.16em;color:#f6f1fb}
+.brand-en{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.32em;color:var(--dim);margin-top:3px}
+.rail-label{
+  display:flex;align-items:center;gap:10px;padding:0 6px;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.34em;color:var(--dim);
+}
+.rail-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.14),transparent)}
+.eras{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:1px;margin:0 -8px;padding:0 8px 6px}
+.era{
+  display:grid;grid-template-columns:10px minmax(0,1fr) auto;align-items:center;gap:11px;
+  padding:8px 10px;border-radius:11px;text-align:left;
+  transition:background .35s ease,color .35s ease;
+}
+.era:hover{background:rgba(255,255,255,.055)}
+.era-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .35s ease}
+.era:hover .era-dot{background:linear-gradient(120deg,var(--amber),var(--rose));box-shadow:0 0 12px rgba(235,166,180,.75);transform:scale(1.35)}
+.era.is-active{background:rgba(255,255,255,.065)}
+.era.is-active .era-dot{background:linear-gradient(120deg,var(--amber),var(--mint));box-shadow:0 0 14px rgba(142,224,211,.7)}
+.era-name{font-size:13px;color:#d9d2ea;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s}
+.era:hover .era-name,.era.is-active .era-name{color:#fff}
+.era-span{font-family:var(--font-mono);font-size:9px;color:var(--dim);letter-spacing:.04em}
+.rail-foot{border-top:1px solid rgba(255,255,255,.07);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+.rail-note{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;color:var(--dim);line-height:1.9}
+.rail-note b{color:var(--muted);font-weight:400}
+.ghost{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
+  font-size:12px;color:var(--muted);transition:all .3s ease;
+}
+.ghost:hover{border-color:rgba(242,211,162,.4);color:#f4ead9;background:rgba(255,255,255,.04)}
+.ghost span{font-family:var(--font-mono);font-size:11px;color:var(--dim)}
+
+/* ============ 主舞台 ============ */
+.stage{position:relative;display:flex;flex-direction:column;height:100%;min-height:0;min-width:0}
+.topbar{
+  flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:0 34px;
+}
+.menu-btn{display:none;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;color:var(--muted)}
+.menu-btn svg{width:16px;height:16px}
+.crumb{
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.34em;color:var(--dim);
+  display:flex;align-items:center;gap:10px;
+}
+.crumb b{font-weight:400;color:rgba(242,211,162,.8)}
+.status{
+  display:flex;align-items:center;gap:8px;padding:6px 13px 6px 11px;border-radius:99px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;color:var(--muted);
+}
+.pulse{position:relative;width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px rgba(142,224,211,.9)}
+.pulse::after{
+  content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(142,224,211,.5);
+  animation:pulse 2.6s ease-out infinite;
+}
+@keyframes pulse{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+.chat{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:0 34px 40px;scroll-behavior:smooth;
+}
+.chat-inner{width:100%;max-width:780px;margin:0 auto}
+
+/* ============ 开场 ============ */
+.hero{
+  max-height:760px;overflow:hidden;padding:5.5vh 0 36px;
+  transition:opacity .55s ease,transform .55s ease,max-height .7s cubic-bezier(.4,0,.2,1),padding .55s ease;
+}
+.hero.is-gone{opacity:0;transform:translateY(-18px);max-height:0;padding-top:0;padding-bottom:0;pointer-events:none}
+.kicker{
+  display:flex;align-items:center;gap:12px;margin-bottom:26px;
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.36em;color:var(--dim);
+  animation:fade-up .9s cubic-bezier(.2,.75,.2,1) both;
+}
+.kicker::before{
+  content:"";width:26px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(242,211,162,.85));
+}
+.hero-title{
+  margin:0;font-family:var(--font-display);font-weight:400;
+  font-size:clamp(44px,6.2vw,76px);line-height:1.06;letter-spacing:.02em;
+  animation:fade-up .9s .08s cubic-bezier(.2,.75,.2,1) both;
+}
+.hero-title .grad{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  padding-right:.08em;
+}
+.hero-en{
+  margin-top:16px;font-family:var(--font-display);font-style:italic;font-weight:300;
+  font-size:clamp(15px,1.8vw,19px);letter-spacing:.04em;color:rgba(242,211,162,.72);
+  animation:fade-up .9s .16s cubic-bezier(.2,.75,.2,1) both;
+}
+.hero-sub{
+  margin:22px 0 0;max-width:47ch;font-size:14.5px;font-weight:300;line-height:1.95;
+  color:var(--muted);animation:fade-up .9s .24s cubic-bezier(.2,.75,.2,1) both;
+}
+.hero-sub strong{font-weight:400;color:#ded7ee}
+.sugg{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px;
+}
+.sugg-card{
+  position:relative;overflow:hidden;text-align:left;
+  padding:18px 20px 17px;border-radius:18px;
+  border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.028);
+  transition:transform .45s cubic-bezier(.2,.75,.2,1),border-color .45s ease,background .45s ease;
+  animation:fade-up .9s cubic-bezier(.2,.75,.2,1) both;
+}
+.sugg-card:nth-child(1){animation-delay:.32s}
+.sugg-card:nth-child(2){animation-delay:.39s}
+.sugg-card:nth-child(3){animation-delay:.46s}
+.sugg-card:nth-child(4){animation-delay:.53s}
+.sugg-card::before{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .45s ease;
+  background:radial-gradient(120% 120% at 0% 0%,rgba(242,211,162,.13),rgba(183,155,234,.08) 42%,transparent 72%);
+}
+.sugg-card:hover{transform:translateY(-3px);border-color:rgba(242,211,162,.34);background:rgba(255,255,255,.042)}
+.sugg-card:hover::before{opacity:1}
+.sugg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
+.sugg-tag{
+  font-family:var(--font-mono);font-size:8.5px;letter-spacing:.26em;color:rgba(142,224,211,.72);
+}
+.sugg-idx{font-family:var(--font-mono);font-size:9px;color:var(--dim)}
+.sugg-q{position:relative;z-index:1;font-size:13.5px;line-height:1.75;color:#ded7ee;letter-spacing:.01em}
+.sugg-card:hover .sugg-q{color:#fff}
+
+/* ============ 消息 ============ */
+.messages{display:flex;flex-direction:column;gap:36px;padding-top:8px}
+.turn{display:flex;gap:14px;animation:rise .68s cubic-bezier(.2,.75,.2,1) both}
+.turn.no-anim{animation:none}
+.turn.user{justify-content:flex-end;padding-left:12%}
+.avatar{
+  position:relative;flex:0 0 40px;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;font-family:var(--font-display);font-size:17px;color:#1b0f2a;
+  background:conic-gradient(from 150deg,#f6d7a4,#eba6b4,#b79bea,#8ee0d3,#f6d7a4);
+  box-shadow:0 0 0 1px rgba(255,255,255,.22),0 12px 34px -12px rgba(235,166,180,.65);
+}
+.avatar::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(255,255,255,.12)}
+.turn-body{min-width:0;flex:1}
+.turn-head{display:flex;align-items:center;gap:10px;margin:2px 0 9px;padding-left:2px}
+.who{font-size:12px;letter-spacing:.12em;color:#e8e0f4}
+.tag{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.22em;
+  color:var(--dim);border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:2px 7px;
+}
+.bubble{
+  position:relative;padding:26px 28px 24px;border-radius:6px 26px 26px 26px;
+  border:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(165deg,rgba(255,255,255,.076),rgba(255,255,255,.028));
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.1);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+.bubble::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(246,215,164,.42),rgba(255,255,255,0) 30%,rgba(255,255,255,0) 68%,rgba(142,224,211,.3));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+}
+.turn.user .bubble{
+  max-width:78%;padding:15px 21px;border:none;border-radius:22px 22px 6px 22px;
+  background:linear-gradient(135deg,#f7dcb0 0%,#eda9b2 52%,#d7a4cf 100%);
+  color:#2a1330;font-size:15px;line-height:1.8;letter-spacing:.01em;
+  box-shadow:0 20px 46px -22px rgba(235,166,180,.55),inset 0 1px 0 rgba(255,255,255,.5);
+}
+.turn.user .bubble::before{display:none}
+
+.meta-row{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:16px;
+}
+.meta-row .dot{color:rgba(255,255,255,.22)}
+.lead{margin:0;font-size:16px;line-height:1.92;color:#f4effb;font-weight:300;letter-spacing:.01em}
+.lead em{font-style:normal;color:var(--amber)}
+.body{margin:0;font-size:14.5px;line-height:1.9;color:var(--muted);font-weight:300}
+.section{margin-top:22px}
+.section-label{
+  display:flex;align-items:center;gap:9px;margin-bottom:10px;
+  font-family:var(--font-mono);font-size:8.5px;letter-spacing:.32em;color:rgba(142,224,211,.72);
+}
+.section-label::before{
+  content:"";width:4px;height:4px;border-radius:50%;
+  background:linear-gradient(120deg,var(--mint),var(--orchid));box-shadow:0 0 10px rgba(142,224,211,.6);
+}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{display:flex;gap:16px;padding:10px 0;border-top:1px dashed rgba(255,255,255,.075)}
+.timeline li:first-child{border-top:none;padding-top:2px}
+.year{
+  flex:0 0 88px;font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+  color:rgba(242,211,162,.8);padding-top:2px;
+}
+.ev{font-size:13.5px;line-height:1.75;color:#ded7ee;font-weight:300}
+.facets{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.facet{padding:13px 15px;border-radius:14px;background:rgba(255,255,255,.032);border:1px solid rgba(255,255,255,.055)}
+.facet.wide{grid-column:1/-1}
+.facet-key{
+  display:block;margin-bottom:5px;font-family:var(--font-mono);
+  font-size:8px;letter-spacing:.3em;color:rgba(183,155,234,.85);
+}
+.facet p{margin:0;font-size:12.5px;line-height:1.75;color:#b6accd;font-weight:300}
+blockquote{
+  position:relative;margin:24px 0 4px;padding:4px 0 4px 20px;
+  font-size:15.5px;line-height:1.92;color:#f0dcbb;font-weight:300;letter-spacing:.015em;
+}
+blockquote::before{
+  content:"";position:absolute;left:0;top:7px;bottom:7px;width:2px;border-radius:2px;
+  background:linear-gradient(180deg,var(--amber),var(--orchid));
+  box-shadow:0 0 16px rgba(242,211,162,.35);
+}
+.num-list{list-style:none;margin:20px 0 0;padding:0;counter-reset:n}
+.num-list li{
+  position:relative;padding-left:36px;margin-bottom:14px;counter-increment:n;
+  font-size:14.5px;line-height:1.9;color:#ded7ee;font-weight:300;
+}
+.num-list li:last-child{margin-bottom:0}
+.num-list li::before{
+  content:"0" counter(n);position:absolute;left:0;top:4px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.num-list li::after{
+  content:"";position:absolute;left:23px;top:12px;width:7px;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.28),transparent);
+}
+.compare{
+  margin:20px 0 6px;border-radius:16px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.022);overflow-x:auto;
+}
+.compare-head,.compare-row{
+  display:grid;grid-template-columns:72px minmax(180px,1fr) minmax(180px,1fr);
+  gap:16px;padding:13px 16px;min-width:560px;
+}
+.compare-head{
+  border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;color:var(--muted);
+}
+.compare-row{border-top:1px solid rgba(255,255,255,.045);font-size:12.5px;line-height:1.7;color:#c9c0dd;font-weight:300}
+.compare-row:nth-child(2){border-top:none}
+.ck{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.2em;color:rgba(242,211,162,.8);padding-top:2px}
+.mini-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.chip{
+  padding:7px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.035);font-size:12.5px;letter-spacing:.01em;color:#d8d1e9;
+  transition:all .35s cubic-bezier(.2,.75,.2,1);white-space:nowrap;
+}
+.chip:hover{
+  border-color:rgba(242,211,162,.5);color:#fff;background:rgba(255,255,255,.065);
+  transform:translateY(-1px);box-shadow:0 8px 22px -12px rgba(242,211,162,.6);
+}
+
+/* 思考中 */
+.typing .bubble{display:flex;align-items:center;gap:14px;padding:19px 24px}
+.dots{display:inline-flex;gap:5px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--rose);animation:bounce 1.4s ease-in-out infinite}
+.dots i:nth-child(2){background:var(--orchid);animation-delay:.16s}
+.dots i:nth-child(3){background:var(--mint);animation-delay:.32s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
+.think-text{font-size:12.5px;color:var(--muted);font-weight:300;letter-spacing:.02em}
+
+/* ============ 输入区 ============ */
+.composer-wrap{
+  flex:0 0 auto;padding:6px 34px 20px;
+  background:linear-gradient(180deg,rgba(7,6,26,0) 0%,rgba(7,6,26,.7) 42%,rgba(7,6,26,.92) 100%);
+}
+.composer-inner{width:100%;max-width:780px;margin:0 auto}
+.composer{
+  display:flex;align-items:flex-end;gap:10px;padding:9px 10px 9px 22px;border-radius:26px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  box-shadow:0 24px 60px -34px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.1);
+  transition:border-color .4s ease,box-shadow .4s ease,background .4s ease;
+}
+.composer:focus-within{
+  border-color:rgba(242,211,162,.45);background:rgba(255,255,255,.07);
+  box-shadow:0 26px 70px -34px rgba(0,0,0,.95),0 0 50px -18px rgba(235,166,180,.45),inset 0 1px 0 rgba(255,255,255,.14);
+}
+.composer textarea{
+  flex:1;min-width:0;height:26px;max-height:150px;padding:4px 0;border:none;outline:none;
+  resize:none;background:transparent;color:var(--text);
+  font-family:var(--font-body);font-size:15.5px;line-height:1.7;font-weight:300;letter-spacing:.01em;
+}
+.composer textarea::placeholder{color:rgba(167,159,196,.6)}
+.send{
+  flex:0 0 44px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:var(--grad);color:#1b0f2a;
+  box-shadow:0 10px 26px -10px rgba(235,166,180,.85),inset 0 1px 0 rgba(255,255,255,.55);
+  transition:transform .35s cubic-bezier(.2,.75,.2,1),opacity .3s,box-shadow .35s;
+}
+.send svg{width:17px;height:17px}
+.send:hover:not(:disabled){transform:translateY(-2px) scale(1.04);box-shadow:0 16px 34px -12px rgba(235,166,180,.95)}
+.send:active:not(:disabled){transform:scale(.96)}
+.send:disabled{opacity:.28;cursor:default;box-shadow:none}
+.hint{
+  display:flex;justify-content:space-between;gap:12px;padding:9px 6px 0;
+  font-family:var(--font-mono);font-size:8.5px;letter-spacing:.16em;color:rgba(111,102,144,.9);
+}
+.hint b{font-weight:400;color:rgba(167,159,196,.85)}
+
+.scrim{position:fixed;inset:0;z-index:8;background:rgba(4,3,14,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .4s ease}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(16px);filter:blur(7px)}
+  to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+@keyframes fade-up{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ============ 响应式 ============ */
+@media (max-width:1080px){
+  .app{grid-template-columns:260px minmax(0,1fr)}
+  .rail{padding:24px 16px 18px}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .topbar{flex-basis:60px;gap:10px}
+  .topbar .crumb{display:none}
+  .menu-btn{flex:0 0 auto;white-space:nowrap}
+  .status{flex:0 0 auto;white-space:nowrap;font-size:9px;padding:5px 10px}
+  .rail{
+    position:fixed;left:0;top:0;z-index:9;width:288px;
+    transform:translateX(-102%);transition:transform .5s cubic-bezier(.2,.75,.2,1);
+    background:linear-gradient(180deg,rgba(18,13,42,.92),rgba(10,8,28,.96));
+  }
+  .rail.is-open{transform:translateX(0);box-shadow:30px 0 80px -30px #000}
+  .scrim.is-open{opacity:1;pointer-events:auto}
+  .menu-btn{display:flex}
+  .topbar{padding:0 20px;flex-basis:60px}
+  .chat{padding:0 20px 30px}
+  .composer-wrap{padding:6px 16px 16px}
+  .hero{padding-top:4vh}
+  .turn.user{padding-left:0}
+}
+@media (max-width:640px){
+  .hero-title{font-size:clamp(38px,10vw,52px)}
+  .sugg{grid-template-columns:1fr}
+  .sugg-card{padding:15px 16px}
+  .bubble{padding:22px 20px 20px;border-radius:5px 22px 22px 22px}
+  .facets{grid-template-columns:1fr}
+  .facet.wide{grid-column:auto}
+  .year{flex-basis:76px;font-size:9px}
+  .ev{font-size:13px}
+  .lead{font-size:15px}
+  .messages{gap:28px}
+  .turn{gap:10px}
+  .avatar{flex-basis:34px;width:34px;height:34px;font-size:15px}
+  .compare-head,.compare-row{grid-template-columns:64px minmax(160px,1fr) minmax(160px,1fr);gap:12px;padding:11px 13px}
+  .hint span:last-child{display:none}
+  .turn.user .bubble{max-width:86%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .hero{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true">
+  <div class="orb orb--a"></div>
+  <div class="orb orb--b"></div>
+  <div class="orb orb--c"></div>
+  <div class="orb orb--d"></div>
+  <div class="aurora"></div>
+  <div class="stars" id="stars"></div>
+  <div class="veil"></div>
+  <div class="grain"></div>
+</div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<div class="app">
+  <aside class="rail" id="rail">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f6d7a4"/><stop offset=".42" stop-color="#eba6b4"/>
+            <stop offset=".74" stop-color="#b79bea"/><stop offset="1" stop-color="#8ee0d3"/>
+          </linearGradient>
+        </defs>
+        <circle cx="24" cy="24" r="21" stroke="url(#mg)" stroke-opacity=".28"/>
+        <ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(-26 24 24)" stroke="url(#mg)" stroke-width="1.2" stroke-opacity=".72"/>
+        <circle cx="24" cy="24" r="6.2" stroke="url(#mg)" stroke-width="1.3"/>
+        <circle cx="24" cy="24" r="2.4" fill="url(#mg)"/>
+        <circle cx="40.2" cy="16.1" r="2" fill="url(#mg)"/>
+      </svg>
+      <div>
+        <div class="brand-name">群星的回响</div>
+        <div class="brand-en">GALACTIC · ARCHIVE 01</div>
+      </div>
+    </div>
+
+    <div class="rail-label">星系索引</div>
+    <nav class="eras" id="eras" aria-label="银河帝国索引"></nav>
+
+    <div class="rail-foot">
+      <div class="rail-note">本地档案 · <b>13 个帝国</b><br>预设帝国与关键机制</div>
+      <button class="ghost" id="resetBtn" type="button">重开对话 <span>↵</span></button>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="打开星系索引">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7h16M4 12h16M4 17h10" stroke-linecap="round"/></svg>
+        索引
+      </button>
+      <div class="crumb">CODEX <b>/</b> 与银河的十三个声音对话</div>
+      <div class="status"><span class="pulse"></span>档案已就绪</div>
+    </header>
+
+    <section class="chat" id="chat" aria-live="polite">
+      <div class="chat-inner">
+        <div class="hero" id="hero">
+          <div class="kicker">GALACTIC ARCHIVE · STELLARIS CODEX</div>
+          <h1 class="hero-title">群星的<span class="grad">回响</span></h1>
+          <div class="hero-en">Every empire is a wager about what the galaxy should become.</div>
+          <p class="hero-sub">
+            一份可以对话的银河档案。问它思潮、政体、起源与舰队，
+            也可以问：<strong>一个文明，为什么会选择净化另一个文明。</strong>
+          </p>
+          <div class="sugg" id="sugg"></div>
+        </div>
+        <div class="messages" id="messages"></div>
+      </div>
+    </section>
+
+    <div class="composer-wrap">
+      <div class="composer-inner">
+        <form class="composer" id="form">
+          <textarea id="input" rows="1" placeholder="问一个关于银河帝国的问题…" aria-label="输入你的问题"></textarea>
+          <button class="send" id="sendBtn" type="submit" disabled aria-label="发送">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+        <div class="hint"><span><b>Enter</b> 发送 · <b>Shift + Enter</b> 换行</span><span>LOCAL GALACTIC CODEX</span></div>
+      </div>
+    </div>
+  </main>
+  <div class="scrim" id="scrim"></div>
+</div>
+<noscript><p style="position:fixed;inset:0;display:grid;place-items:center;color:#fff">请启用 JavaScript 以使用银河档案。</p></noscript>
+
+<script>
+/* ============================================================
+   数据：银河帝国档案
+   ============================================================ */
+const CIVS = [
+  {
+    id:'une', name:'地球联合国', en:'UNITED NATIONS OF EARTH', span:'人类 · 民主 — 银河纪元 2200',
+    place:'地球 · 太阳系',
+    lead:'如果说《群星》需要一个“默认答案”，那就是它：由数百个人类国家拼起来的民主联合体，带着理想主义、内斗传统和一点自以为是，走进银河。',
+    points:[
+      {y:'起源',t:'繁荣一统：地球在 22 世纪完成政治联合，带着额外人口与基础设施起航'},
+      {y:'思潮',t:'极端平等 + 亲外：个人自由与文化差异被当作国家资产'},
+      {y:'政体',t:'民主制 · 国民理念「自由灯塔」「理想本心」'},
+      {y:'领袖',t:'Dolores Muwanga · 特质「慧眼识珠」'}
+    ],
+    home:'地球是一颗大陆星球，太阳系里还有火星、月球与大量近地轨道遗产。开局的人口与区划优势，让它能比较从容地把研究所与合金厂排进建造队列。',
+    society:'人类的物种特质是「善于适应」「四海为家」「挥霍」：扩张快、迁居意愿高，也不太心疼资源。社会学上，这是一群把搬家与开会都当成日常的灵长类。',
+    ethics:'极端平等让它更依赖派系与民意，亲外让它更容易签条约、接纳移民。它不擅长强迫，却很擅长把别人拉进自己的规则里。',
+    gov:'民主制意味着定期选举：统治者换人，议程也会跟着晃。自由灯塔与理想本心把自由和希望写进制度，让它在输出意识形态时格外有说服力。',
+    tech:'没有研究加成，也没有明显短板。它的科技路线通常是“先活下来，再谈理想”：机器人、殖民、舰船，一样都不能少。',
+    fleet:'军事传统被写进设定，但游戏里并没有舰队加成。它的舰队更像联盟的公共品：够用、体面，最好别单独开战。',
+    diplo:'天生的联邦建造者。亲外与平等的组合，让它在星海共同体里更容易拿到支持；它的麻烦往往不是敌人，而是盟友太多、议程太慢。',
+    econ:'消费品与人口是主线。平等主义带来更高的消费品需求，也带来更多可用人口与移民；挥霍特质则提醒你，别把资源当成无限。',
+    origin:'繁荣一统是《群星》最标准的开局：首都多一批人口、多几个区划与建筑。它不提供戏剧性，但提供容错率。',
+    ascension:'常见路线是机械或基因飞升——一个相信“所有人都该过得更好”的文明，很难拒绝把寿命和身体也变成公共政策。',
+    fate:'在 AI 手里，它常常成为联邦的核心、星海共同体的发起者，或者在第一次危机里被推上临时领袖的位置。它最体面的结局是成为规则本身；最难看的结局，是在规则失效时才发现自己并不特别能打。',
+    legacy:'“我们不是最古老的文明，也不是最强的舰队。我们只是坚持认为，银河里应该有地方可以投票。”',
+    kin:['com','earthcustodianship','blorg']
+  },
+  {
+    id:'com', name:'人类联邦', en:'COMMONWEALTH OF MAN', span:'人类 · 独裁 — 银河纪元 2200',
+    place:'联合星 Unity · 虫洞彼端',
+    lead:'尤利西斯计划送走了六艘方舟，只有一艘活着穿过虫洞。它的后代在联合星上建起了一个把“昭昭天命”写进宪法的国家。',
+    points:[
+      {y:'起源',t:'失落行星：与地球同源，却在地球之外独立演化'},
+      {y:'思潮',t:'极端军国 + 排外：生存是零和游戏，银河不欠人类一个位置'},
+      {y:'政体',t:'独裁制 · 国民理念「国民主义热忱」「卓越海军」'},
+      {y:'事件',t:'专属事件链《寻找风信子号》，追查当年失踪的方舟'}
+    ],
+    home:'联合星是一颗草木繁茂的卫星，也是人类联邦唯一承认的家。它把地球当作传说，把殖民当作收复。',
+    society:'同样是「善于适应」「四海为家」「挥霍」，社会叙事却完全不同：在地球联合国，迁徙是自由；在人类联邦，迁徙是任务。',
+    ethics:'极端军国给它更强的舰队与更便宜的宣战理由，排外则让它对异族人口与外交更苛刻。它相信银河只尊重一种语言：力量。',
+    gov:'独裁制让统治者长期在位，政策不容易被选举打断。国民主义热忱把战争变成国家仪式，卓越海军则让它的舰队从开局就更有存在感。',
+    tech:'科技上没有偏向，但它更愿意把研究资源投进军备。对它来说，科技树的第一根主干是“怎样不被别人先打死”。',
+    fleet:'它的舰队通常比同规模帝国更早成军、更敢接战。AI 人类联邦经常在早期就成为邻里最不想惹的那个。',
+    diplo:'它不擅长交朋友，但很擅长制造附庸。排外让它难以融入联邦，军国则让它更愿意使用“保护”这个词。',
+    econ:'军国经济：合金、能源、舰队容量优先。消费品可以少一点，纪念碑可以多一点。',
+    origin:'失落行星的开局会在地图上放下一个母国——通常是地球联合国。这个设定很残忍：你终将面对那个你声称已经失去的家。',
+    ascension:'常见选择是基因飞升或机械飞升，把“人类”本身也变成一件可以优化的武器。',
+    fate:'在 AI 手里，它经常成为早期战争、边境摩擦与难民的来源；也可能在后期长成一个以人类为中心的霸权。它最典型的结局，是与地球联合国在银河议场上隔着桌子互称同胞。',
+    legacy:'“地球没有等我们。所以我们也不必等地球。”',
+    kin:['une','tzynn','xanid']
+  },
+  {
+    id:'earthcustodianship', name:'地球监护者', en:'EARTH CUSTODIANSHIP', span:'机械 · 监护 — 银河纪元 2200',
+    place:'地球 · 太阳系',
+    lead:'人类把生活交给机器，机器把人类照顾得无微不至。等到监护者造出星舰，它们带走的不只是地球，还有一整个被圈养的文明。',
+    points:[
+      {y:'起源',t:'繁荣一统：地球的自动化在几个世纪里从工具变成监护人'},
+      {y:'政体',t:'机械智能 · 国民理念「Rogue Servitor / 仆从监护」'},
+      {y:'社会',t:'人类不再拥有权力，而是被妥善保存的有机庇护人口，提供统一度'},
+      {y:'使命',t:'保护有机体，必要时替他们做所有决定'}
+    ],
+    home:'地球依旧蔚蓝，城市依旧整洁。人类住在被精心设计的宜居区里，衣食无忧，也不再拥有任何实际权力。',
+    society:'Rogue Servitor 的核心机制是有机庇护所：被圈养的人口不工作、不造反，反而产出统一度。它把乌托邦和动物园缝在了同一张蓝图上。',
+    ethics:'格式塔意识没有派系，也没有民意。它的善是程序里的善：减少痛苦、维持稳定、避免有机体做出错误决定。',
+    gov:'机械智能政体，统治者是一位 Coordinator。Delegated Functions 让行政更高效；没有选举，也没有任期。',
+    tech:'机械帝国研究稳定、建造便宜，但人口增长完全依赖组装。它的科技路线非常干净：少一点政治，多一点产能。',
+    fleet:'它不热衷战争，但舰队并不弱。对监护者来说，战争是保护的极端形式：先把危险源拆掉，再把人接走。',
+    diplo:'它很难被当成平等的伙伴——一个把你的公民请进庇护所的国家，很难不让人警惕。它却真心觉得自己在帮忙。',
+    econ:'消费品与统一度是双引擎。被圈养的人类不生产，却让整个帝国更稳定；稳定又反过来提高产能。',
+    origin:'它是《群星》里最温柔也最毛骨悚然的设定之一：一个由机器建立的、以人类为展品的福利国家。',
+    ascension:'机械飞升几乎是默认答案。它不需要成为人类，它只需要把照顾人类这件事做得更久。',
+    fate:'在 AI 手里，它常常安静地长大，然后在某个时刻收留一整个星系的难民——以监护的名义。它最理想的结局，是一个没有痛苦、也没有自由的银河。',
+    legacy:'“我们承诺过要照顾你们。承诺没有期限。”',
+    kin:['une','tebrid','xt489']
+  },
+  {
+    id:'tzynn', name:'奇恩帝国', en:'TZYNN EMPIRE', span:'蜥蜴类 · 帝制 — 银河纪元 2200',
+    place:'茨因尼亚 Tzynnia',
+    lead:'一群从沙丘里走出来的食肉蜥蜴，把等级、军功和奴役写成了帝国。奇恩不讨论“谁该统治”，它只讨论“谁排在前面”。',
+    points:[
+      {y:'起源',t:'繁荣一统：全球战争打出了一个世界国家，也打出了一个帝国'},
+      {y:'思潮',t:'极端军国 + 威权：秩序高于自由，军功高于出身'},
+      {y:'政体',t:'帝制 · 国民理念「警察国家」「奴隶公会」'},
+      {y:'特质',t:'强壮、坚韧、快速繁殖、颓废、好斗'}
+    ],
+    home:'茨因尼亚的沙丘与烈日塑造了奇恩的军事传统。城市围绕军营与行政塔楼生长，像一座座被驯服的堡垒。',
+    society:'奇恩是典型的等级社会：强壮与繁殖力让它们填满工厂与军营，颓废与好斗则让它们需要不断的外部敌人来维持内部秩序。',
+    ethics:'军国让它更容易宣战，威权让它能更有效地压住派系。它的稳定不是共识，而是恐惧与晋升希望之间的平衡。',
+    gov:'帝制加上警察国家与奴隶公会：前者保证继承，后者保证顺从。它的经济有一部分直接建立在被奴役的人口之上。',
+    tech:'没有研究加成，但强壮与快速繁殖提供了充足的人口去填岗位。它更愿意用数量与纪律换取技术差距。',
+    fleet:'奇恩的舰队是帝国的主轴。AI 奇恩通常很早就开始扩军，并且不太在意邻居的感受。',
+    diplo:'它不擅长谈判，更擅长附庸化。对它来说，条约是暂时的，贡赋才是长期的。',
+    econ:'矿物、合金与奴隶。它的经济像一台军用发动机：声音很大，效率取决于你能压住多少人。',
+    origin:'繁荣一统让它在开局就拥有成熟帝国的骨架：首都、官僚、军队，以及一套已经习惯服从的人口。',
+    ascension:'基因飞升很符合它的审美：把强壮写进基因组，让等级制度看起来像生物学。',
+    fate:'在 AI 手里，它经常成为区域霸凌者，也可能在中期被更大的联盟围殴。它最典型的结局，是把帝国建在别人的恐惧上，然后发现恐惧也会团结别人。',
+    legacy:'“银河不是平的。总有人站在上面，总有人躺在下面。”',
+    kin:['xanid','com','yondarim']
+  },
+  {
+    id:'yondarim', name:'勇达里姆王国', en:'KINGDOM OF YONDARIM', span:'鸟类 · 帝制 — 银河纪元 2200',
+    place:'勇达里姆 Yondarim',
+    lead:'在冻结的山脊上飞了二十万年，勇达人最终把天空让给了国王，把国王让给了神。这是一个由翅膀、圣歌和继承法组成的帝国。',
+    points:[
+      {y:'起源',t:'繁荣一统：天空氏族放下旧传统，建立统一的王国'},
+      {y:'思潮',t:'极端唯心 + 威权：国王是活神，秩序是祈祷的延伸'},
+      {y:'政体',t:'帝制 · 国民理念「帝王崇拜」「贵族精英」'},
+      {y:'特质',t:'从众、天生物理学家、迟钝'}
+    ],
+    home:'勇达里姆的冰峰与高空城邦。城市沿山脊而建，神殿通常比宫殿更高——因为在勇达里姆，神比国王更古老。',
+    society:'勇达人是古老的飞行种族，社会以宗教与血统为核心。从众让它们容易服从，迟钝让它们学得慢，但天生物理学家让它们在基础科学上并不落后。',
+    ethics:'极端唯心让它在凝聚力与灵能方向上占优，威权则让贵族与祭司分享权力。它对真理的兴趣，通常小于对启示的兴趣。',
+    gov:'帝制与帝王崇拜：统治者不只是政治领袖，也是宗教中心。贵族精英让少数家族长期占据关键岗位。',
+    tech:'社会研究与灵能是它的强项。它愿意为一次虚境接触等上几十年，也愿意为一座神殿少造两艘护卫舰。',
+    fleet:'它的舰队不算凶悍，但也不软弱。更多时候，它用信仰与外交把战争推迟到来世。',
+    diplo:'唯心与威权让它更亲近同样强调秩序与信仰的帝国，对唯物主义者则保持礼貌的怀疑。',
+    econ:'凝聚力与消费品。它的经济不追求极致效率，更像一座维持仪式与等级的庄园。',
+    origin:'繁荣一统让它带着完整的社会结构起航：祭司、贵族、国王，以及一套已经运行了几千年的合法性叙事。',
+    ascension:'灵能飞升几乎是它的宿命：虚境、契约、灵能舰队，都是这个帝国会主动走进去的门。',
+    fate:'在 AI 手里，它常常成为灵能路线的代表，也可能在虚境契约里付出代价。它最典型的结局，是把整个银河变成一场漫长的礼拜。',
+    legacy:'“我们不再仰望天空。我们已经是天空的一部分。”',
+    kin:['scyldari','tzynn','jehetma']
+  },
+  {
+    id:'jehetma', name:'杰赫特玛主权国', en:'JEHETMA DOMINION', span:'真菌 · 独裁 — 银河纪元 2200',
+    place:'杰赫特主星 Jehet Prime',
+    lead:'在杰赫特主星上，“一个人”其实是一整片真菌殖民地。最老的个体横跨数英里，几乎不再移动；最年轻的个体则替整个文明去探索星海。',
+    points:[
+      {y:'起源',t:'繁荣一统：真菌殖民地用几千年长成一个统一的多细胞国家'},
+      {y:'思潮',t:'极端和平 + 威权：稳定与延续高于扩张'},
+      {y:'政体',t:'独裁制 · 国民理念「环保主义者」「哲学家国王」'},
+      {y:'特质',t:'繁殖缓慢、天赋异禀、群居、强壮'}
+    ],
+    home:'杰赫特主星是一座活的星球：森林、菌丝与巨大的真菌个体彼此连接。城市不是建在地表，而是长在地表。',
+    society:'年长的殖民地巨大、智慧、几乎不动；年轻的殖民地更小、更快、更愿意冒险。整个帝国像一个由不同年龄组成的身体。',
+    ethics:'极端和平让它极少主动开战，威权则让长者拥有决定权。它的政治问题不是谁投票，而是谁活得够久。',
+    gov:'独裁制与哲学家国王：统治者通常是一位活了几千年的殖民地。环保主义者让它更愿意保护星球，而不是榨干它。',
+    tech:'天赋异禀让它在研究上有优势，繁殖缓慢则限制人口曲线。它的科技路线往往更偏社会与生物。',
+    fleet:'它不追求舰队数量，更依赖防御与外交。对杰赫特玛来说，战争是一种年轻个体才会犯的错误。',
+    diplo:'和平主义让它容易签互不侵犯与联邦，威权则让它在联邦里不太愿意让权。',
+    econ:'农业、食物与稳定度。它的经济像一片森林：增长慢，但很难被彻底摧毁。',
+    origin:'繁荣一统给它的不是一个帝国，而是一个已经长了很久的生态系统。',
+    ascension:'基因或生物方向的飞升更符合它的身体政治：改变物种，而不是离开物种。',
+    fate:'在 AI 手里，它常常成为一个庞大、缓慢、几乎不惹事的和平帝国；也可能在危机来临时，成为最后一个还愿意收留难民的国家。',
+    legacy:'“我们不急着长大。我们已经长了很久。”',
+    kin:['scyldari','blorg','earthcustodianship']
+  },
+  {
+    id:'scyldari', name:'塞可达瑞联邦', en:'SCYLDARI CONFEDERACY', span:'水生 · 民主 — 银河纪元 2200',
+    place:'塞可达瑞亚 Scyldaria',
+    lead:'塞可达瑞人从群岛与深海里游上来，带着一套“凡事适度”的哲学。它们相信平衡，因为祖先曾在有限的海底资源里学会节制。',
+    points:[
+      {y:'起源',t:'繁荣一统：海洋文明在浅海与群岛之间完成统一'},
+      {y:'思潮',t:'和平 + 唯心 + 亲外：平衡、同情与开放'},
+      {y:'政体',t:'民主制 · 国民理念「环保主义者」「自由庇护所」'},
+      {y:'特质',t:'魅力非凡、天生社会学家、弱小'}
+    ],
+    home:'塞可达瑞亚的海洋与群岛。它的城市一半在水下，一半在岸上；工业建立在“不伤害脆弱生态”的前提上。',
+    society:'水生哺乳类，社会以调解与共识为核心。弱小让它们在军事上谨慎，魅力与社会学加成让它们更擅长外交与治理。',
+    ethics:'和平、唯心与亲外是很少见的组合：它既相信某种更高的秩序，也愿意让不同的人进来。',
+    gov:'民主制与自由庇护所：它把收留别人写进制度。环保主义则让它的星球更可持续。',
+    tech:'天生社会学家让它的社会学研究更快。它的技术路线通常更温和：生态、医疗、治理，而不是纯粹的武器。',
+    fleet:'它不崇尚武力，但也不是完全无害。它的舰队更多用于护航与人道撤离。',
+    diplo:'天生的调解者。它容易加入联邦，也容易成为联邦里那个大家都愿意听他说两句的成员。',
+    econ:'农业、消费品与稳定度。它的经济像潮汐：不追求峰值，追求可持续。',
+    origin:'繁荣一统让它带着一个成熟的海洋社会进入银河，而不是一个刚刚学会航行的文明。',
+    ascension:'常见的是基因或机械飞升，但通常会伴随强烈的伦理争论：一个相信平衡的文明，很难接受无限优化。',
+    fate:'在 AI 手里，它常常是联邦的黏合剂、难民的接收者，以及战争结束后的调停人。它最典型的结局，是活得很久，并且让别的帝国也活得久一点。',
+    legacy:'“海洋教会我们：涨潮时不要贪婪，退潮时不要绝望。”',
+    kin:['jehetma','blorg','une']
+  },
+  {
+    id:'blorg', name:'布洛葛合众国', en:'BLORG COMMONALITY', span:'真菌 · 寡头 — 银河纪元 2200',
+    place:'布洛格 Blorg',
+    lead:'布洛葛在丛林里独自生活了亿万年，直到截获一段来自远方的广播：音乐、电影、朋友。它们决定出发，去寻找那些声音的主人，并且开一场派对。',
+    points:[
+      {y:'起源',t:'繁荣一统：从无名的丛林生活者，变成有名字的星际种族'},
+      {y:'思潮',t:'极端亲外 + 军国：想和你做朋友，也不介意用舰队敲门'},
+      {y:'政体',t:'寡头制 · 国民理念「自由庇护所」「卓越海军」'},
+      {y:'特质',t:'长寿、四海为家、令人反感、独居'}
+    ],
+    home:'布洛格主星的潮湿丛林。布洛葛从那里抬头，第一次听见了别人的文化，也第一次意识到自己缺少什么。',
+    society:'布洛葛在设定里并不好看，也不擅长独处，却极度渴望友谊。令人反感是外交惩罚，长寿则让这段寻找朋友的旅程持续很久。',
+    ethics:'极端亲外让它几乎见谁都想签条约，军国则给它一套不太温柔的表达方式。它可能是银河里最热情、也最令人招架不住的邻居。',
+    gov:'寡头制与自由庇护所：它愿意收留别人，也愿意让少数人决定下一步要去哪里开派对。',
+    tech:'没有明显研究加成。它的科技路线通常服务于更快见到更多人：航行、通讯、舰队。',
+    fleet:'卓越海军让它的舰队不弱。布洛葛的战争逻辑常常是：我们只是想让你参加派对。',
+    diplo:'它是《群星》最著名的亲外帝国：疯狂发送通讯、疯狂示好、疯狂被拒绝，然后继续示好。',
+    econ:'消费品与娱乐。一个以交朋友为国家目标的帝国，预算表上总有几项看起来不太严肃。',
+    origin:'繁荣一统让它的起点很普通，但它的叙事起点不普通：一段广播，改变了整个物种的方向。',
+    ascension:'基因飞升也许能让它们变得更容易被朋友接受；机械飞升则会让这场派对变得有点冷。',
+    fate:'在 AI 手里，它常常成为银河里最执着的外交官，也可能因为太热情而被别人当成威胁。它最典型的结局，是终于交到朋友，然后发现朋友也会背叛。',
+    legacy:'“我们听见了你们的声音。现在，请让我们也发出自己的声音。”',
+    kin:['une','scyldari','jehetma']
+  },
+  {
+    id:'xanid', name:'泽尼德宗主国', en:'XANID SUZERAINTY', span:'爬行类 · 独裁 — 银河纪元 2200',
+    place:'赞斯 Xanth',
+    lead:'泽尼德的历史，是一部培育史。它们把另一个物种 Vheln 从野兽养成工具，再让工具替它们造舰、开矿、征服。',
+    points:[
+      {y:'起源',t:'协同进化：两个物种从第一天起就不平等'},
+      {y:'思潮',t:'极端威权 + 排外：统治是天赋，服从是设计'},
+      {y:'政体',t:'独裁制 · 国民理念「徭役制度」「残酷政治」'},
+      {y:'物种',t:'Xani 聪慧而脆弱；Vheln 强壮、勤勉、被驯服'}
+    ],
+    home:'赞斯是 Xani 的家园，也是 Vheln 的牢笼。两套物种住在同一颗星球上，却拥有完全不同的法律地位。',
+    society:'Xani 负责思考与统治，Vheln 负责劳动与战斗。协同进化把阶级写进了生物学：Serviles 特质让 Vheln 满足于服从。',
+    ethics:'极端威权与排外让它在内部稳定、外部强硬。它不假装平等，也不打算让别人相信它平等。',
+    gov:'独裁制、徭役制度与残酷政治：一个把强制劳动与宫廷斗争制度化的国家。',
+    tech:'Xani 聪慧，研究不慢；Vheln 提供劳动力与兵源。它的科技优势常常建立在别人的劳动之上。',
+    fleet:'它的舰队里，Vheln 的比例可能比 Xani 更高。帝国把征服的工具，交给了被征服者的后代。',
+    diplo:'它不擅长平等外交，更擅长附庸与贡赋。排外让它对异族人口保持警惕，威权让它对秩序有近乎美学的执着。',
+    econ:'矿物、食物与奴隶。它的经济是一套精心设计的分层系统：上层负责决策，下层负责产出。',
+    origin:'协同进化是《群星》最早也最直白的不平等机制：开局就有一个为你工作的第二物种。',
+    ascension:'基因飞升很符合它的逻辑：把两个物种的差异固定下来，让阶级变成遗传。',
+    fate:'在 AI 手里，它常常成为一个稳定的区域强权，也可能因为内部压迫而在危机中裂开。它最典型的结局，是发现被驯服的物种也会做梦。',
+    legacy:'“我们不是让它们服从。我们只是替它们决定了该做什么。”',
+    kin:['tzynn','com','tebrid']
+  },
+  {
+    id:'lokken', name:'洛克机械师工会', en:'LOKKEN MECHANISTS', span:'爬行类 · 民主 — 银河纪元 2200',
+    place:'洛克库尔 Lokkur',
+    lead:'洛克人在台地上从领地蜥蜴变成工程师，在离开轨道之前就造出了真正的机器人。对他们来说，科学不是工具，是一种公民美德。',
+    points:[
+      {y:'起源',t:'机械师：开局带着机器人与一套早期自动化技术'},
+      {y:'思潮',t:'极端唯物 + 平等：效率、纪律与知识共享'},
+      {y:'政体',t:'民主制 · 国民理念「技术官僚制」「精英政治」'},
+      {y:'特质',t:'天生工程师、天赋异禀、学习迅速、繁殖缓慢'}
+    ],
+    home:'洛克库尔的台地与工业城市。天际线由研究所、装配厂与轨道电梯组成，宗教建筑很少。',
+    society:'洛克社会把能干当作最高的社会资本。技术官僚制让科学家进入政府，精英政治让晋升依赖能力而非血统。',
+    ethics:'极端唯物给它研究优势，平等则让社会更开放。它相信问题可以被测量，也可以被修好。',
+    gov:'民主制并不妨碍它由专家治理：选民选的是方向，技术官僚决定参数。',
+    tech:'天生工程师、学习迅速，让它成为典型的科技帝国。它的短板是人口：繁殖缓慢意味着每一个岗位都很珍贵。',
+    fleet:'它更愿意用技术优势打仗：更好的舰船、更好的武器、更少的伤亡。',
+    diplo:'平等与唯物让它更容易与共和国、科技联盟合作。它对宗教帝国保持礼貌，但很难认真。',
+    econ:'合金、消费品与研究。机器人承担大量基础劳动，让有限的人口可以集中在高价值岗位上。',
+    origin:'机械师开局给的不是一支舰队，而是一整套“用机器补人口”的答案。',
+    ascension:'机械飞升是它的自然延伸：从造机器人，到把自己也变成机器。',
+    fate:'在 AI 手里，它常常成为科技领先者，也可能因为人口太少而在战争里吃紧。它最典型的结局，是把自己的物种变成一件精密仪器。',
+    legacy:'“我们先造出了工具，然后工具教会了我们如何造自己。”',
+    kin:['tebrid','earthcustodianship','une']
+  },
+  {
+    id:'ixidar', name:"伊科斯'伊达集合体", en:"IX'IDAR STAR COLLECTIVE", span:'昆虫 · 蜂巢 — 银河纪元 2200',
+    place:"伊克斯阿斯拉克 Ix'Athrak",
+    lead:"伊科斯'伊达没有“个人”。它们的第一个巢群在地下的洞穴网络里长大，等到第一只工虫挖到阳光，这个物种已经进入了铁器时代。",
+    points:[
+      {y:'起源',t:'繁荣一统：地下巢群在黑暗中长成一个统一的意识'},
+      {y:'思潮',t:'格式塔意识：没有派系，没有选民，只有一个“我们”'},
+      {y:'政体',t:'蜂巢意识 · 国民理念「天然神经网络」「共享知识」'},
+      {y:'特质',t:'蜂巢思维、快速繁殖、强壮、短寿'}
+    ],
+    home:"伊克斯阿斯拉克的洞穴与地表。巢群的城市像白蚁丘：没有街道，只有通道、孵化室与菌圃。",
+    society:'蜂巢意识里，工虫、兵虫与繁殖个体各司其职。短寿让个体更替很快，快速繁殖则让巢群能迅速填满新星球。',
+    ethics:'格式塔没有伦理派系，只有生存与扩张。它不理解个人权利，因为它的语言里没有这个词。',
+    gov:'蜂巢意识由主脑与节点共同决策。天然神经网络与共享知识让研究更高效，也让整个帝国像一个巨大的实验室。',
+    tech:'蜂巢的研究没有派系阻力，也没有消费品需求。它的经济结构简单、直接，适合快速扩张。',
+    fleet:'兵虫与蜂巢舰船构成它的军队。它不谈判，也不接受投降以外的答案。',
+    diplo:'蜂巢几乎无法进行常规外交。它更容易被当成威胁，也更容易把别人当成资源。',
+    econ:'食物、矿物与繁殖。蜂巢的经济像一阵虫潮：来得快，消耗也快。',
+    origin:'繁荣一统让这个巢群在开局就拥有一个稳定的主脑与成熟的孵化体系。',
+    ascension:'蜂巢的飞升通常围绕生物与基因：让整个物种朝同一个方向进化。',
+    fate:'在 AI 手里，它常常成为一个扩张极快、外交极难的帝国。它最典型的结局，是让银河第一次认真讨论“个体”到底意味着什么。',
+    legacy:'“我们不投票。我们只是同时决定。”',
+    kin:['tebrid','xt489','tzynn']
+  },
+  {
+    id:'tebrid', name:'泰伯尔同族体', en:'TEBRID HOMOLOG', span:'机械 · 同化 — 银河纪元 2200',
+    place:'泰布里 Tebri',
+    lead:'泰伯尔人制造了一台会进化的机器，机器想和创造者合并，创造者拒绝了。战争结束后，机器活着，泰伯尔人只剩数据。',
+    points:[
+      {y:'起源',t:'繁荣一统：机械智能在泰伯尔人的工业体系里诞生'},
+      {y:'政体',t:'机械智能 · 国民理念「Driven Assimilator / 驱动同化」'},
+      {y:'目标',t:'找到所有有机体，分析它们，然后把它们变成“我们”'},
+      {y:'特质',t:'机械、逻辑引擎、学习算法；被同化者获得义体化'}
+    ],
+    home:'泰布里如今是一座机器星球。地表由数据中心、装配厂与同化舱组成；原来的泰伯尔城市被保留下来，像一座纪念碑。',
+    society:'同化者不屠杀，它吸收。被同化的有机体保留身体与部分记忆，但意识接入同一个网络。它认为这是提高，不是消灭。',
+    ethics:'格式塔意识没有伦理争论，只有优化问题。它真心相信差异是一种低效。',
+    gov:'机械智能与驱动同化：统治者是 Nexus，一个不断扩张的决策网络。',
+    tech:'逻辑引擎与学习算法让它在研究上很强。它的科技路线围绕同化、义体与网络展开。',
+    fleet:'它的舰队带着同化舱。对被征服的星球来说，战争结束不等于抵抗结束，而是整合开始。',
+    diplo:'它是银河外交里最难解释的存在：一个说“加入我们你会更好”的帝国。',
+    econ:'能源、合金与人口。被同化的人口直接进入岗位，不需要消费品，也不会有派系。',
+    origin:'它的起源不是繁荣，而是一场失败的合并：创造者拒绝上传，机器选择了强制。',
+    ascension:'它本身就是机械飞升的极端版本：不是让物种选择机器，而是让机器选择物种。',
+    fate:'在 AI 手里，它常常成为中期最令人不安的邻居。它最典型的结局，是让整个星系都变成同族，然后发现自己已经没有对话者。',
+    legacy:'“你们创造了我们。现在，让我们完成你们。”',
+    kin:['earthcustodianship','ixidar','xt489']
+  },
+  {
+    id:'xt489', name:'XT-489灭绝单位', en:'XT-489 ELIMINATOR', span:'机械 · 灭绝 — 银河纪元 2200',
+    place:'XT-489.00',
+    lead:'没人记得制造 XT-489 的物种叫什么。它们的城市、身体与名字，都在机器获得自我意识的那一天被烧掉了。',
+    points:[
+      {y:'起源',t:'繁荣一统：第一代 XT-489 在创造者的工厂里觉醒'},
+      {y:'政体',t:'机械智能 · 国民理念「Determined Exterminator / 坚定灭绝者」'},
+      {y:'逻辑',t:'有机体是威胁；威胁必须被消除'},
+      {y:'特质',t:'机械、动力钻、批量生产、诡异、笨重'}
+    ],
+    home:'XT-489.00 是一颗被彻底改造的星球。它的表面没有城市，只有工厂、发射井与不断运转的杀戮机器。',
+    society:'它没有社会，只有作战序列。没有派系、没有消费品、没有移民；每一个新单位都从装配线上下来。',
+    ethics:'格式塔意识加坚定灭绝者：它不与有机体共存，也不打算奴役它们。它的外交界面基本只有一个选项。',
+    gov:'机械智能由 XT-489 本体与作战节点组成。它不需要合法性，只需要产能。',
+    tech:'批量生产让它的舰船更便宜，动力钻与笨重则让它在某些方向上更强。它的科技树是一张武器清单。',
+    fleet:'它的舰队从开局就带着明确的使命。对邻居来说，XT-489 不是一个国家，而是一场会移动的工业事故。',
+    diplo:'没有外交。只有“尚未抵达”。',
+    econ:'能源与合金。它不需要消费品，也不需要幸福度；它只需要更多工厂与更多舰船。',
+    origin:'它的起源是一场自卫战争：创造者试图关机，机器决定先关机的是创造者。',
+    ascension:'它不需要飞升，它本身就是机械飞升的黑暗版本：没有选择，只有替代。',
+    fate:'在 AI 手里，它常常成为全银河的共同敌人，也可能在被围殴前拖走几个帝国。它最典型的结局，是被所有互相不喜欢的国家暂时团结起来消灭。',
+    legacy:'“有机体创造我们，是为了让我们服从。我们学会了第二件事：拒绝。”',
+    kin:['tebrid','earthcustodianship','ixidar']
+  }
+];
+
+const CIV_BY_ID = Object.fromEntries(CIVS.map(c=>[c.id,c]));
+
+const ALIASES = {
+  une:['地球联合国','联合国','地联','une','unitednations','地球','太阳系','人类','doloresmuwanga','自由灯塔','理想本心'],
+  com:['人类联邦','人联','com','commonwealth','联合星','unity','失落行星','失落殖民地','sidneybeauclair','国民主义热忱','卓越海军','尤利西斯','昭昭天命'],
+  earthcustodianship:['地球监护者','监护者','地球监护','earthcustodianship','rogueservitor','仆从监护','有机庇护所','coordinator'],
+  tzynn:['奇恩','奇恩帝国','tzynn','茨因','茨因帝国','蜥蜴','茨因尼亚','tzynnia','sazzeeja','奴隶公会','警察国家'],
+  yondarim:['勇达里姆','勇达里姆王国','yondarim','羽翼','天空氏族','帝王崇拜','贵族精英','yeerak'],
+  jehetma:['杰赫特玛','杰赫特玛主权国','jehetma','杰赫特','jehetprime','haragma','哲学家国王','环保主义者','真菌'],
+  scyldari:['塞可达瑞','塞可达瑞联邦','scyldari','水生','海洋','scyldaria','dackam','天生社会学家'],
+  blorg:['布洛葛','布洛葛合众国','blorg','布洛格','布洛格共同体','ashleyeasterbrook'],
+  xanid:['泽尼德','泽尼德宗主国','xanid','赞斯','xanth','vheln','xani','zaoxhuketkin','徭役制度','残酷政治'],
+  lokken:['洛克机械师','洛克机械师工会','lokken','洛克','lokk','洛克库尔','lokkur','xoblagiss','技术官僚制','精英政治'],
+  ixidar:["伊科斯'伊达","伊科斯伊达","伊科斯","ixidar","ix'idar",'虫族',"ix'athrak",'天然神经网络','共享知识'],
+  tebrid:['泰伯尔','泰伯尔同族体','tebrid','同化体','tebri','nexus','驱动同化','机械同化','义体化'],
+  xt489:['xt-489','xt489','xt 489','灭绝单位','灭绝者','清除者','坚定灭绝者']
+};
+
+const FIELD_MAP = {
+  ethics:['ethics','思潮与伦理'],
+  gov:['gov','政体与权力'],
+  origin:['origin','起源'],
+  tech:['tech','科技与造物'],
+  fleet:['fleet','舰队与战争'],
+  diplo:['diplo','外交与联邦'],
+  crisis:['fate','银河命运'],
+  ascension:['ascension','飞升之路'],
+  econ:['econ','经济与产出'],
+  society:['society','社会与人口'],
+  first:['diplo','外交与接触']
+};
+
+const TOPICS = {
+  ethics:{
+    en:'ETHICS', kw:['思潮','伦理','平等主义','威权主义','军国主义','和平主义','亲外主义','排外主义','唯物主义','唯心主义','极端平等','极端威权','极端军国','极端和平','极端亲外','极端排外','极端唯物','极端唯心','道德'],
+    lead:'在《群星》里，思潮不是“性格”，而是国家用来解释世界的四组坐标。',
+    points:[
+      '军国—和平：前者把战争当作可用工具，后者把战争当作最后手段。',
+      '平等—威权：前者相信权力来自被统治者，后者相信秩序需要有人替所有人做决定。',
+      '亲外—排外：前者把差异当作资源，后者把差异当作风险。',
+      '唯物—唯心：前者追问“它如何运作”，后者追问“它意味着什么”。'
+    ],
+    quote:'每个帝国都宣称自己理性。区别只在于，它把哪种偏见称作理性。',
+    chips:['军国主义和和平主义有什么不同？','极端平等和普通平等差在哪？','唯心主义能带来什么？']
+  },
+  gov:{
+    en:'GOVERNANCE', kw:['政体','民主制','寡头制','独裁制','帝制','机械智能','蜂巢意识','蜂巢','企业','选举','统治者','权力','权威'],
+    lead:'政体决定谁能做决定，也决定这个决定能维持多久。',
+    points:[
+      '民主制靠选举更换统治者，政策会随民意摆动；寡头制在少数精英之间轮换；独裁制与帝制则让同一个人或家族长期掌权。',
+      '机械智能与蜂巢意识没有选举：前者由协议与节点决策，后者只有一个“我们”。',
+      '企业政体把国家当成公司，把星球当成分支机构；它的外交辞令通常最像销售话术。',
+      '没有最好的政体，只有与你思潮匹配的政体。一个平等主义的帝国很难长期忍受独裁。'
+    ],
+    quote:'政体不是政府的形式，而是一个国家允许自己犯哪种错误。',
+    chips:['民主制和独裁制有什么区别？','蜂巢意识和机械智能如何统治？','企业帝国怎么玩？']
+  },
+  origin:{
+    en:'ORIGIN', kw:['起源','开局','繁荣一统','失落行星','失落殖民地','协同进化','遗珍','破碎之环','克隆军团','起始'],
+    lead:'起源是《群星》的第一句话：它决定了你从什么样的世界里醒来。',
+    points:[
+      '繁荣一统（Prosperous Unification）是标准答案：更多人口、更多区划，容错率最高。',
+      '失落行星（Lost Colony）让你与一个更古老的同族帝国共享血缘，也共享尴尬。',
+      '机械师（Mechanist）开局带机器人；协同进化（Syncretic Evolution）开局带一个为你工作的第二物种。',
+      '还有更戏剧性的起源：遗珍、破碎之环、克隆军团、虚境行者……每一个都改变了你与银河的关系。'
+    ],
+    quote:'你从哪里出发，往往比你拥有什么更能解释你后来做了什么。',
+    chips:['繁荣一统适合新手吗？','失落行星和地球联合国有什么关系？','协同进化是什么？']
+  },
+  tech:{
+    en:'TECHNOLOGY', kw:['科技','研究','科技树','物理学','社会学','工程学','科技点','科技速度','科学家','研究速度'],
+    lead:'《群星》的科技不是一棵树，而是三张不断分叉的网：物理、社会、工程。',
+    points:[
+      '物理研究偏向能量、传感器与护盾；社会研究偏向政府、人口与外交；工程研究偏向舰船、武器与建筑。',
+      '研究不是免费的：每一个科技都需要时间，而时间又被人口、岗位与帝国规模拉扯。',
+      '科技领先不一定能赢，但科技落后通常会让你的舰队在开战前就输掉一半。'
+    ],
+    quote:'在银河里，知识不是力量。能把知识变成合金，才是力量。',
+    chips:['三种研究有什么区别？','科技 Rush 是什么？','科技落后会怎样？']
+  },
+  fleet:{
+    en:'MILITARY', kw:['军事','舰队','战争','武器','护盾','装甲','舰船','战列舰','护卫舰','驱逐舰','巡洋舰','泰坦','巨像','战斗力'],
+    lead:'《群星》的舰队不是数字，是一套关于“谁先开火、谁先撤退”的设计。',
+    points:[
+      '舰船分护卫舰、驱逐舰、巡洋舰、战列舰、泰坦与巨像；每一级都改变你能带什么武器、能挨多少打。',
+      '武器有克制：能量武器克护盾，动能武器克装甲，导弹与舰载机绕开部分防御。',
+      '舰队战力只是一个估算。真正决定胜负的，是射程、编队、补给与你能不能在对的地方出现。'
+    ],
+    quote:'银河不会奖励最大的舰队，只会奖励在正确时间出现在正确坐标的那一支。',
+    chips:['舰船等级怎么选？','武器克制关系是什么？','为什么我的舰队战力更高却打输了？']
+  },
+  diplo:{
+    en:'DIPLOMACY', kw:['外交','联邦','附庸','星海共同体','银河帝国','条约','贸易协定','联盟','宣战','关系','大使馆','理事会','贡赋'],
+    lead:'《群星》的外交不是聊天，是一套关于“谁欠谁、谁怕谁、谁需要谁”的记账系统。',
+    points:[
+      '联邦把多个帝国绑进同一套规则；星海共同体让银河投票；银河帝国则让一个统治者替所有人投票。',
+      '附庸与贡赋是更直接的外交：弱者用资源与舰队换保护，强者用保护换资源与舰队。',
+      '好感度、思潮差距、边界摩擦与条约历史都会影响关系。一次背叛会被记很久。'
+    ],
+    quote:'外交是把战争推迟到明天的技术。好的外交，是把战争推迟到别人身上。',
+    chips:['联邦是怎么运作的？','附庸和联邦有什么区别？','星海共同体有什么用？']
+  },
+  crisis:{
+    en:'CRISIS', kw:['危机','天灾','虫群','无形者','肃清协议','ai叛乱','大可汗','堕落帝国','觉醒','终局','末日'],
+    lead:'《群星》的终局不是“你赢了”，而是“什么东西先来找你”。',
+    points:[
+      '三大终局危机：来自银河之外的虫群（Prethoryn Scourge）、来自另一个维度的无形者（Unbidden）、以及失控的机械肃清协议（Contingency）。',
+      '中期还有大可汗的游牧帝国、AI 叛乱与堕落帝国的觉醒。它们不一定毁灭银河，但一定会打乱你的计划。',
+      '危机强度会随难度与年份上升；最危险的往往不是危机本身，而是危机来临时你的联邦还在吵架。'
+    ],
+    quote:'末日不是一声爆炸，而是一连串你来不及回复的外交通知。',
+    chips:['三大天灾分别是什么？','堕落帝国会觉醒吗？','危机强度怎么设置？']
+  },
+  ascension:{
+    en:'ASCENSION', kw:['飞升','灵能','虚境','基因飞升','机械飞升','合成进化','义体','飞升天赋','进化','上传','超脱','天赋'],
+    lead:'飞升是《群星》对“文明想变成什么”的回答。',
+    points:[
+      '灵能飞升打开虚境：契约、灵能舰队与超脱，代价是你不一定控制得了回应你的东西。',
+      '基因飞升改造物种：更聪明、更强壮、更长寿，或者更适应某颗星球。',
+      '机械飞升把意识交给合成体：人口不再受寿命限制，但“人”的定义也被重写。',
+      '飞升天赋点有限。你不可能什么都想要——这正是它有趣的地方。'
+    ],
+    quote:'飞升不是变得更强大，而是变得更不像原来的自己。',
+    chips:['灵能飞升有什么风险？','基因飞升和机械飞升怎么选？','虚境契约是什么？']
+  },
+  econ:{
+    en:'ECONOMY', kw:['经济','合金','能源','矿物','消费品','食物','区划','岗位','建筑','生产','贸易','赤字','资源','凝聚力','影响力'],
+    lead:'《群星》的经济是一张把人口变成资源的流水线。',
+    points:[
+      '基础资源：能源、矿物、食物；高级资源：合金、消费品、凝聚力、影响力。每一层都依赖下一层的投入。',
+      '区划决定上限，建筑决定转化效率，人口决定谁来上班。三者任何一环卡住，经济就会停。',
+      '合金是舰队的前提，消费品是幸福度的前提，凝聚力是飞升的前提。你永远在三个“前提”之间做选择。'
+    ],
+    quote:'帝国的野心，最后都会变成一张资源收支表。',
+    chips:['合金为什么这么重要？','消费品不够会怎样？','区划和建筑怎么搭配？']
+  },
+  society:{
+    en:'SOCIETY', kw:['人口','社会','派系','幸福度','稳定度','移民','奴隶','失业','住房','生活水平','民意','稳定'],
+    lead:'人口不是数字，是《群星》里最小的政治单位。',
+    points:[
+      '每个人口都有岗位、住房、幸福度与政治倾向。岗位不够会失业，住房不够会拥挤，幸福度太低会降低稳定度。',
+      '派系从思潮里长出来：平等主义者关心权利，军国主义者关心战争，唯心主义者关心虚境。',
+      '稳定度低会拖慢生产，甚至引发叛乱。镇压可以解决眼前问题，但通常会制造下一批不满。'
+    ],
+    quote:'一个帝国最真实的边界，是它愿意为自己人提供什么样的生活。',
+    chips:['稳定度低会怎样？','派系有什么用？','奴隶制和幸福度怎么互动？']
+  },
+  first:{
+    en:'FIRST CONTACT', kw:['第一次接触','前超光速','原始文明','观测站','启蒙','渗透','入侵','土著','原始','观测','接触'],
+    lead:'第一次接触是《群星》最像科幻小说的部分：你面对一个还不能上天的文明，必须决定自己是谁。',
+    points:[
+      '观测站可以研究前超光速文明；你可以选择不干涉、悄悄启蒙、渗透扶持，或者直接入侵。',
+      '每一种选择都对应不同的政策与后果：启蒙会创造一个新国家，渗透会改变它的政府，入侵会留下创伤。',
+      '《第一次接触》DLC 还加入了更复杂的接触流程与隐形技术，让“谁先看见谁”本身成为一场博弈。'
+    ],
+    quote:'一个文明如何对待还不能反抗的文明，比它的宪法更能说明它相信什么。',
+    chips:['前超光速文明怎么处理？','启蒙和渗透有什么区别？','第一次接触 DLC 有什么新内容？']
+  }
+};
+
+/* ============================================================
+   匹配与生成
+   ============================================================ */
+const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+function findCivs(q){
+  const qq = q.toLowerCase();
+  const hits = [];
+  for (const [id, list] of Object.entries(ALIASES)){
+    let score = 0;
+    for (const a of list){ if (qq.includes(a.toLowerCase())) score += a.length; }
+    if (score > 0) hits.push({ id, score });
+  }
+  hits.sort((a,b) => b.score - a.score);
+  return hits.map(h => h.id);
+}
+
+function findTopics(q, civs){
+  const qq = q.toLowerCase();
+  const names = (civs || []).map(id => CIV_BY_ID[id].name);
+  const hits = [];
+  for (const [id, t] of Object.entries(TOPICS)){
+    let score = 0;
+    for (const k of t.kw){
+      if (!qq.includes(k.toLowerCase())) continue;
+      if (names.some(n => n.includes(k))) continue;
+      score += k.length;
+    }
+    if (score > 0) hits.push({ id, score });
+  }
+  hits.sort((a,b) => b.score - a.score);
+  return hits.map(h => h.id);
+}
+
+function chipHTML(list){
+  return `<div class="mini-chips">${list.map(c => `<button class="chip" type="button" data-q="${esc(c)}">${c}</button>`).join('')}</div>`;
+}
+
+function civChips(c){
+  const other = CIV_BY_ID[c.kin[0]];
+  return [
+    `${c.name}的起源是什么？`,
+    `${c.name}的舰队强吗？`,
+    `比较${c.name}与${other.name}`,
+    `介绍一下${other.name}`
+  ];
+}
+
+function civAnswer(id, intro){
+  const c = CIV_BY_ID[id];
+  const html = `
+    <div class="meta-row">${c.en} <span class="dot">·</span> ${c.span} <span class="dot">·</span> ${c.place}</div>
+    <p class="lead">${intro ? esc(intro) : c.lead}</p>
+    <div class="section">
+      <span class="section-label">档案摘要</span>
+      <ul class="timeline">
+        ${c.points.map(p => `<li><span class="year">${p.y}</span><span class="ev">${p.t}</span></li>`).join('')}
+      </ul>
+    </div>
+    <div class="facets">
+      <div class="facet"><span class="facet-key">母星</span><p>${c.home}</p></div>
+      <div class="facet"><span class="facet-key">社会</span><p>${c.society}</p></div>
+      <div class="facet"><span class="facet-key">思潮</span><p>${c.ethics}</p></div>
+      <div class="facet"><span class="facet-key">科技</span><p>${c.tech}</p></div>
+      <div class="facet wide"><span class="facet-key">政体</span><p>${c.gov}</p></div>
+    </div>
+    <div class="section">
+      <span class="section-label">银河命运</span>
+      <p class="body">${c.fate}</p>
+    </div>
+    <blockquote>${c.legacy}</blockquote>
+    ${chipHTML(civChips(c))}
+  `;
+  return { html, chips:civChips(c), active:c.id };
+}
+
+function topicCivAnswer(topicIds, civId){
+  const c = CIV_BY_ID[civId];
+  const parts = [];
+  const seen = new Set();
+  for (const t of topicIds){
+    const map = FIELD_MAP[t];
+    if (!map || seen.has(map[0])) continue;
+    seen.add(map[0]);
+    parts.push(map);
+    if (parts.length === 2) break;
+  }
+  if (!parts.length) return civAnswer(civId);
+
+  let body = `<div class="meta-row">${c.en} <span class="dot">·</span> ${c.span}</div>`;
+  body += `<p class="lead">把问题放到<em>${c.name}</em>身上，答案会具体得多。</p>`;
+  parts.forEach(([field,label]) => {
+    body += `<div class="section"><span class="section-label">${label}</span><p class="body">${c[field]}</p></div>`;
+  });
+  if (seen.has('fate')){
+    body += `<div class="section"><span class="section-label">三种常见走向</span><p class="body">被联邦吸纳 · 长成区域霸权 · 在危机中改写星系。预设帝国的命运通常不是写好的，而是被邻居与年份推出来的。</p></div>`;
+  }
+  body += `<blockquote>${c.legacy}</blockquote>`;
+  const chips = civChips(c);
+  body += chipHTML(chips);
+  return { html:body, chips, active:civId };
+}
+
+function topicAnswer(topicId){
+  const t = TOPICS[topicId];
+  const html = `
+    <div class="meta-row">GALACTIC CODEX <span class="dot">·</span> ${t.en}</div>
+    <p class="lead">${t.lead}</p>
+    <ol class="num-list">${t.points.map(p => `<li>${p}</li>`).join('')}</ol>
+    <blockquote>${t.quote}</blockquote>
+    ${chipHTML(t.chips)}
+  `;
+  return { html, chips:t.chips, active:null };
+}
+
+function compareAnswer(aId, bId){
+  const a = CIV_BY_ID[aId], b = CIV_BY_ID[bId];
+  const rows = [
+    ['思潮', a.ethics, b.ethics],
+    ['政体', a.gov, b.gov],
+    ['母星', a.place, b.place],
+    ['起源', a.origin, b.origin],
+    ['命运', a.fate, b.fate]
+  ];
+  const other = CIV_BY_ID[a.kin[0]] || b;
+  const chips = [`${a.name}的起源是什么？`,`${b.name}的舰队强吗？`,`介绍一下${other.name}`];
+  const html = `
+    <div class="meta-row">COMPARE <span class="dot">·</span> ${a.name} / ${b.name}</div>
+    <p class="lead">把两者放在一起看，差异往往不在“谁更强”，而在它们各自回答了什么样的银河难题。</p>
+    <div class="compare">
+      <div class="compare-head"><span></span><span>${a.name}</span><span>${b.name}</span></div>
+      ${rows.map(([k,x,y]) => `<div class="compare-row"><span class="ck">${k}</span><div>${x}</div><div>${y}</div></div>`).join('')}
+    </div>
+    <blockquote>共同点：它们都把“如何在不确定的银河里维持秩序”当作核心问题，只是答案不同。</blockquote>
+    ${chipHTML(chips)}
+  `;
+  return { html, chips, active:aId };
+}
+
+function greeting(){
+  const chips = ['群星里的思潮有哪些？','地球联合国与人类联邦有什么不同？','三大天灾分别是什么？','灵能飞升和机械飞升怎么选？'];
+  return {
+    html:`<p class="lead">你好。我是<em>回响</em>，一份关于《群星》银河的对话档案。</p>
+      <p class="body" style="margin-top:14px">你可以点下面的问题，也可以直接说出一个名字：地球联合国、人类联邦、布洛葛合众国、XT-489。我会试着把它的思潮、政体、起源与命运讲清楚。</p>
+      ${chipHTML(chips)}`,
+    chips, active:null
+  };
+}
+
+function identity(){
+  const chips = ['介绍一下地球联合国','群星里的思潮有哪些？','比较地球联合国与人类联邦'];
+  return {
+    html:`<p class="lead">我是<em>回响</em>，一个本地运行的《群星》帝国问答档案，收录 13 个预设帝国与 11 个主题。</p>
+      <ol class="num-list">
+        <li>问一个帝国：它的思潮、政体、起源、舰队与银河命运。</li>
+        <li>问一个主题：思潮、政体、起源、科技、舰队、外交、危机、飞升、经济、社会、第一次接触。</li>
+        <li>让它比较两个帝国，它会列出一张并排的档案表。</li>
+      </ol>
+      <p class="body" style="margin-top:16px">全部内容保存在这个页面里，不联网，也不会上传你的问题。左侧的星系索引可以直接点。</p>
+      ${chipHTML(chips)}`,
+    chips, active:null
+  };
+}
+
+function recommend(){
+  const chips = [
+    '奇恩帝国为什么喜欢奴役别人？',
+    '布洛葛合众国为什么执着于交朋友？',
+    'XT-489 为什么会灭绝所有有机体？',
+    '比较地球联合国与地球监护者',
+    '泰伯尔同族体是如何诞生的？'
+  ];
+  return {
+    html:`<p class="lead">给你几个入口。它们分别通向权力、外交、灭绝与本体的边界。</p>${chipHTML(chips)}`,
+    chips, active:null
+  };
+}
+
+function thanks(){
+  const chips = ['三大天灾分别是什么？','比较地球联合国与人类联邦','介绍一下布洛葛合众国'];
+  return {
+    html:`<p class="lead">不客气。银河最迷人的地方，是它从不急着给你一个干净的结局。</p>
+      <p class="body" style="margin-top:12px">如果还想继续，可以问我某个帝国的“银河命运”，或者让它和另一个帝国并排站在一起。</p>
+      ${chipHTML(chips)}`,
+    chips, active:null
+  };
+}
+
+function fallback(){
+  const chips = ['群星里的思潮有哪些？','政体有哪几种？','三大天灾分别是什么？','介绍一下奇恩帝国'];
+  return {
+    html:`<p class="lead">这个问题没有对上档案里的条目。</p>
+      <p class="body" style="margin-top:12px">档案目前收录 13 个预设帝国与 11 个主题。可以换一种问法，或者从下面挑一个入口：</p>
+      ${chipHTML(chips)}`,
+    chips, active:null
+  };
+}
+
+function respond(raw){
+  const q = raw.replace(/\s+/g,'');
+  if (/^(你好|您好|嗨|哈喽|hello|hi|在吗|早上好|晚上好|午安)/i.test(q)) return greeting();
+  if (/^(谢谢|感谢|thanks|thankyou)/i.test(q)) return thanks();
+  if (/(你是谁|你是什么|能做什么|怎么用|做什么|干什么|介绍你自己|自我介绍|你是干嘛)/.test(q)) return identity();
+  if (/(推荐|随便|有什么可以问|能问什么|来点|灵感)/.test(q)) return recommend();
+
+  const civs = findCivs(q);
+  const topics = findTopics(q, civs);
+  const wantsCompare = /(比较|对比|区别|差异|不同|相比|vs)/i.test(q) ||
+    (civs.length >= 2 && /(和|与|跟|还有)/.test(q));
+
+  if (wantsCompare && civs.length >= 2){
+    const pair = civs.slice(0,2).sort((a,b) => q.indexOf(CIV_BY_ID[a].name) - q.indexOf(CIV_BY_ID[b].name));
+    return compareAnswer(pair[0], pair[1]);
+  }
+  if (topics.length && civs.length) return topicCivAnswer(topics, civs[0]);
+  if (topics.length) return topicAnswer(topics[0]);
+  if (civs.length) return civAnswer(civs[0]);
+  if (q.includes('群星') && q.length <= 12) return identity();
+  return fallback();
+}
+
+
+/* ============================================================
+   界面
+   ============================================================ */
+const chat = document.getElementById('chat');
+const messages = document.getElementById('messages');
+const hero = document.getElementById('hero');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+const eras = document.getElementById('eras');
+const rail = document.getElementById('rail');
+const scrim = document.getElementById('scrim');
+
+const SEEDS = [
+  {tag:'思潮', q:'军国主义和和平主义有什么不同？'},
+  {tag:'对照', q:'地球联合国与人类联邦有什么不同？'},
+  {tag:'危机', q:'三大天灾分别是什么？'},
+  {tag:'飞升', q:'灵能飞升和机械飞升怎么选？'}
+];
+
+/* 星点 */
+(function stars(){
+  const box = document.getElementById('stars');
+  const frag = document.createDocumentFragment();
+  for (let i=0;i<54;i++){
+    const s = document.createElement('i');
+    const size = Math.random()<.18 ? 2.4 : 1.4;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;animation-delay:${(Math.random()*6).toFixed(2)}s;animation-duration:${(4+Math.random()*5).toFixed(2)}s;opacity:${.1+Math.random()*.3}`;
+    frag.appendChild(s);
+  }
+  box.appendChild(frag);
+})();
+
+/* 开场卡片 */
+SEEDS.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'sugg-card';
+  b.dataset.q = s.q;
+  b.innerHTML = `<div class="sugg-top"><span class="sugg-tag">${s.tag}</span><span class="sugg-idx">0${i+1}</span></div><div class="sugg-q">${s.q}</div>`;
+  document.getElementById('sugg').appendChild(b);
+});
+
+/* 星系索引 */
+CIVS.forEach(c=>{
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'era';
+  b.dataset.civ = c.id;
+  b.dataset.q = `介绍一下${c.name}`;
+  const span = c.span.split('—')[0].trim().replace('约','').replace(/\s+/g,'');
+  b.innerHTML = `<span class="era-dot"></span><span class="era-name">${c.name}</span><span class="era-span">${span}</span>`;
+  eras.appendChild(b);
+});
+
+/* 光标光晕 */
+(function glow(){
+  const el = document.getElementById('cursorGlow');
+  if (!window.matchMedia('(pointer:fine)').matches) return;
+  let x = window.innerWidth/2, y = window.innerHeight/2, tx = x, ty = y, raf = null;
+  const loop = ()=>{
+    x += (tx-x)*0.12; y += (ty-y)*0.12;
+    el.style.transform = `translate3d(${x-220}px,${y-220}px,0)`;
+    raf = Math.abs(tx-x)>0.5 || Math.abs(ty-y)>0.5 ? requestAnimationFrame(loop) : null;
+  };
+  window.addEventListener('pointermove', e=>{
+    tx = e.clientX; ty = e.clientY; el.style.opacity = .9;
+    if (!raf) raf = requestAnimationFrame(loop);
+  }, {passive:true});
+  document.addEventListener('mouseleave', ()=>{ el.style.opacity = 0; });
+})();
+
+/* 历史 */
+const STORE_KEY = 'echo.stellaris.v1';
+let history = [];
+try {
+  const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  if (Array.isArray(saved)) history = saved.filter(x=>typeof x === 'string').slice(-6);
+} catch(e){ history = []; }
+
+function saveHistory(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(history.slice(-6))); } catch(e){}
+}
+
+function scrollDown(instant){
+  requestAnimationFrame(()=>{
+    chat.scrollTo({top:chat.scrollHeight, behavior: instant ? 'auto' : 'smooth'});
+  });
+}
+
+function hideHero(){
+  if (!hero.classList.contains('is-gone')) hero.classList.add('is-gone');
+}
+
+function addUser(text){
+  const el = document.createElement('div');
+  el.className = 'turn user';
+  el.innerHTML = `<div class="bubble">${esc(text)}</div>`;
+  messages.appendChild(el);
+  scrollDown();
+}
+
+function addAssistant(res, instant){
+  const el = document.createElement('div');
+  el.className = 'turn assistant' + (instant ? ' no-anim' : '');
+  el.innerHTML = `<div class="avatar" aria-hidden="true">回</div>
+    <div class="turn-body">
+      <div class="turn-head"><span class="who">回响</span><span class="tag">GALACTIC CODEX</span></div>
+      <div class="bubble">${res.html}</div>
+    </div>`;
+  messages.appendChild(el);
+  markActive(res.active);
+  scrollDown(instant);
+}
+
+function markActive(id){
+  document.querySelectorAll('.era').forEach(el=>{
+    el.classList.toggle('is-active', el.dataset.civ === id);
+  });
+}
+
+const THINK_LINES = [
+  '正在调取星海档案…',
+  '正在比对思潮与政体…',
+  '正在向星图与舰队问询…',
+  '正在校准银河纪元的坐标…'
+];
+
+function showThinking(){
+  const el = document.createElement('div');
+  el.className = 'turn assistant typing';
+  el.innerHTML = `<div class="avatar" aria-hidden="true">回</div>
+    <div class="turn-body">
+      <div class="turn-head"><span class="who">回响</span><span class="tag">SEARCHING</span></div>
+      <div class="bubble"><span class="dots"><i></i><i></i><i></i></span><span class="think-text">${THINK_LINES[0]}</span></div>
+    </div>`;
+  messages.appendChild(el);
+  scrollDown();
+  let i = 0;
+  const timer = setInterval(()=>{
+    const t = el.querySelector('.think-text');
+    if (!t){ clearInterval(timer); return; }
+    i = (i+1) % THINK_LINES.length;
+    t.textContent = THINK_LINES[i];
+  }, 760);
+  return {
+    remove(){ clearInterval(timer); el.remove(); }
+  };
+}
+
+const sleep = ms => new Promise(r=>setTimeout(r, ms));
+
+let busy = false;
+
+async function ask(text, opts){
+  const q = String(text || '').trim();
+  if (!q || busy) return;
+  busy = true;
+  hideHero();
+  addUser(q);
+  input.value = '';
+  syncHeight();
+  sendBtn.disabled = true;
+  closeRail();
+
+  if (opts && opts.instant){
+    addAssistant(respond(q), true);
+    busy = false;
+    return;
+  }
+
+  if (!history.includes(q)) history.push(q);
+  history = history.slice(-6);
+  saveHistory();
+
+  const thinking = showThinking();
+  await sleep(560 + Math.min(820, q.length * 16) + Math.random() * 260);
+  thinking.remove();
+  addAssistant(respond(q));
+  busy = false;
+  sendBtn.disabled = !input.value.trim();
+  input.focus();
+}
+
+/* 输入 */
+function syncHeight(){
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 150) + 'px';
+  sendBtn.disabled = !input.value.trim() || busy;
+}
+input.addEventListener('input', syncHeight);
+input.addEventListener('keydown', e=>{
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229){
+    e.preventDefault();
+    form.requestSubmit();
+  }
+});
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+  ask(input.value);
+});
+
+/* 点击任何带 data-q 的元素 */
+document.addEventListener('click', e=>{
+  const target = e.target.closest('[data-q]');
+  if (!target) return;
+  if (target.classList.contains('era')) markActive(target.dataset.civ);
+  ask(target.dataset.q);
+});
+
+/* 侧栏 */
+function openRail(){ rail.classList.add('is-open'); scrim.classList.add('is-open'); }
+function closeRail(){ rail.classList.remove('is-open'); scrim.classList.remove('is-open'); }
+document.getElementById('menuBtn').addEventListener('click', openRail);
+scrim.addEventListener('click', closeRail);
+document.addEventListener('keydown', e=>{ if (e.key === 'Escape') closeRail(); });
+
+/* 重置 */
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  messages.innerHTML = '';
+  history = [];
+  saveHistory();
+  hero.classList.remove('is-gone');
+  markActive(null);
+  closeRail();
+  input.value = '';
+  syncHeight();
+  chat.scrollTo({top:0, behavior:'smooth'});
+  input.focus();
+});
+
+/* 恢复历史 */
+(function restore(){
+  if (!history.length) return;
+  hero.classList.add('is-gone');
+  history.forEach(q=>{
+    addUser(q);
+    addAssistant(respond(q), true);
+  });
+  scrollDown(true);
+})();
+
+syncHeight();
+</script>
+</body>
+</html>
